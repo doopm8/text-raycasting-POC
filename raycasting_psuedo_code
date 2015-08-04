@@ -1,0 +1,16 @@
+
+x = player.x
+y = player.y
+
+for i = -1 to 1 step 1/xres
+
+	do
+		y -= 1
+		x += i
+		raylength ++
+		if mpagridthing[x][y] != 0{
+		intercept = true
+		render line i,raylength
+		}
+	loop until intercept = true		
+next i
