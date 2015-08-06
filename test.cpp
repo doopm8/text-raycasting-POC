@@ -64,15 +64,21 @@ screen[xvalue][px] = 1;
 void render(){
 	for (int inc = 1; inc < xres; inc++){
         vline(inc, inc);
-
-	}
-	for (screencell.y = 1; screencell.y < yres + 1; screencell.y++){
-//test
-
-	}
-
 }
-
+for (int y = 1; y < yres; y++){
+	for (int x = 1; x < xres; x++){
+		if (screen[x][y] == 1){
+//for rendering a block
+cout << (char) 177;
+		}else{
+//for rendering a space
+cout << " ";
+		}
+	}
+cout << endl;
+}
+	
+}
 // Raycasting Function
 void raycast(){
 	for (int i(-1); i <= 1; i += 1 / xres){
