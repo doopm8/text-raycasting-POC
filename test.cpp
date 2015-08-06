@@ -46,8 +46,10 @@ int length = 0;
 location camera;
 location ray;
 location mapcell;
+location screencell;
 //vline function
 long  vline(unsigned int xvalue, int whichvline){
+//Turns out I probably only needed one argument, Oh weel.
 int px = yres / 2;
 length = yres / vlinedivisor[whichvline];
 for (px = yres / 2; px < length; px++){
@@ -57,6 +59,20 @@ for (px = yres /2; px > -length; px++){
 screen[xvalue][px] = 1;
 }
 }
+//render function
+//woooooooooooooo!
+void render(){
+	for (int inc = 1; inc < xres; inc++){
+        vline(inc, inc);
+
+	}
+	for (screencell.y = 1; screencell.y < yres + 1; screencell.y++){
+//test
+
+	}
+
+}
+
 // Raycasting Function
 void raycast(){
 	for (int i(-1); i <= 1; i += 1 / xres){
