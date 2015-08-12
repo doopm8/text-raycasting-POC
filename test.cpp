@@ -31,9 +31,9 @@ unsigned int intercept;
 unsigned int xres;
 unsigned int yres;
 int raylength;
-unsigned int vlinedivisor[255];
+double vlinedivisor[255];
 string yorp;
-int vlinelength[256];
+signed long vlinelength[256];
 int i(1);
 int resolutionset(0);
 int map[1024][1024];
@@ -42,13 +42,14 @@ int mapgen(0);
 unsigned char red;
 unsigned char green;
 unsigned char blue;
+int counter(0);
 int length = 0;
 location camera;
 location ray;
 location mapcell;
 location screencell;
 //vline function
-long  vline(unsigned int xvalue, int whichvline){
+void  vline(unsigned int xvalue, int whichvline){
 //Turns out I probably only needed one argument, Oh weel.
 int px = yres / 2;
 length = yres / vlinedivisor[whichvline];
@@ -59,47 +60,54 @@ for (px = yres /2; px > -length; px++){
 screen[xvalue][px] = 1;
 }
 }
-//render function
-//woooooooooooooo!
-void render(){
-	for (int inc = 1; inc < xres; inc++){
+// Raycasting Function
+void Raycast(){
+	for (double i(-1); i <= 1; i = i + 1 / xres){
+        ray.x = camera.x;
+        ray.y = camera.y;
+cout << i << endl;
+cout << "making a ray..." << endl;
+	counter = 0;
+	while (intercept == 0 && counter == 0){
+        ray.y--;
+        ray.x += i;
+        raylength++;
+	if (map[camera.x][(int)(rint(camera.y))] == 1){
+intercept = 1;
+vlinedivisor[int((i+1)* xres / 2)] = raylength;
+                
+	}
+counter++;        
+	}
+        
+	}
+
+}
+
+void Render(){
+ClearScreen();
+for (int inc = 1; inc < xres; inc++){
         vline(inc, inc);
+
 }
 for (int y = 1; y < yres; y++){
 	for (int x = 1; x < xres; x++){
 		if (screen[x][y] == 1){
 //for rendering a block
 cout << (char) 177;
+                
 		}else{
 //for rendering a space
 cout << " ";
+                
 		}
+        
 	}
 cout << endl;
-}
-	
-}
-// Raycasting Function
-void raycast(){
-	for (int i(-1); i <= 1; i += 1 / xres){
-        ray.x = camera.x;
-        ray.y = camera.y;
-	while (intercept == 0){
-        ray.y--;
-        ray.x += i;
-        raylength++;
-	if (map[camera.x][(int)(rint(camera.y))] == 1){
-intercept = 1;
-vlinedivisor[i] = raylength;
-                
-	}
-        
-	}
-        
-	}
 
 }
 
+}
 
 //Main Function
 int main(int argc, char *argv[]){
@@ -109,7 +117,7 @@ ClearScreen();
 cout << "ZaSH"<< endl;
 //Program Loop
 while (i == 1){
-cin >> yorp;	
+getline(cin, yorp);	
 
 
 //Commands
@@ -125,12 +133,15 @@ resolutionset = 0;
 cout << "Values must be integers of 255 or less" << endl;
 }else{cout << "Resolution has been set." 
 << endl;
+resolutionset = 1;
 } 
 }
 //Raycasting
 if (yorp == "/raycast"){
 if (resolutionset == 1 && mapgen ==1){
-raycast();
+cout << "Beginning raycast" << endl;
+Raycast();
+cout << "Ending Raycast" << endl;
 }else{
 cout << "The resolution has not been set or the map has not been generated." << endl << "Use \"/setres\" and \"/mapgen\"." << endl;
 }
@@ -166,6 +177,14 @@ cout << "A Map has been created from a bitmap" << endl;
 
 }
 }
+
+if (yorp == "/render"){
+Render();
+}
+	 
+
+
+
 //Making sure the map is generated
 if (yorp == "/viewmap" && mapgen == 1){
 cout << "IT WERKS!" << endl;
@@ -183,10 +202,7 @@ if (yorp  == "/quit" || yorp == "/exit"){
 //Calling the ClearScreen funtion
 if (yorp == "/cls"){
 	ClearScreen();
-
+}
+//RENDERING!!!!!11
 	}
-
 }
-
-}
-
